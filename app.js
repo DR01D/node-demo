@@ -8,19 +8,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost:27017/node-demo");
+mongoose.connect("mongodb://localhost:27017/node-demo", { useNewUrlParser: true });
 var nameSchema = new mongoose.Schema({
     firstName: String,
     lastName: String
 });
 var User = mongoose.model("User", nameSchema);
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
-});
-
-app.listen(port, () => {
-    console.log('Server listening on port ' +port);
 });
 
 app.post("/addname", (req, res) => {
@@ -32,4 +28,8 @@ app.post("/addname", (req, res) => {
         .catch(err => {
             res.status(400).send("unable to save to database");
         });
+});
+
+app.listen(port, () => {
+    console.log('Server listening on port ' + port);
 });
